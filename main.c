@@ -76,13 +76,16 @@ static flash_increment_status_t write_page_header_callback(unsigned int page, co
 }
      
 void main(void){
-    /* +1 page for header */
-    eventlog_init(&ctx, (PAGES_NUMBER + 1), PAGE_SIZE, EMPTY_FLASH_VALUE, erase_page_events_callback, read_page_events_callback, 
+    uint8_t payload[UINT8_MAX] = {0};
+
+    eventlog_init(&ctx, PAGES_NUMBER, 1, PAGE_SIZE, EMPTY_FLASH_VALUE, erase_page_events_callback, read_page_events_callback, 
                     write_page_events_callback, erase_page_header_callback, read_page_header_callback, write_page_header_callback);    
     printf("Eventlog initialized with %d pages of size %d bytes each.\n", PAGES_NUMBER, PAGE_SIZE);
 
-    eventlog_write(&ctx, 1, time(NULL));
-    eventlog_write(&ctx, 2, time(NULL));
+    eventlog_write(&ctx, 1, time(NULL), NULL, 0);
+
+    size_t payload_size = snprintf((char*) payload, UINT8_MAX, "example payload message");
+    eventlog_write(&ctx, 2, time(NULL), payload, payload_size);
 
     uint8_t buffer[128] = {0};
     size_t received_size = 0;
