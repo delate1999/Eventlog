@@ -1,0 +1,15 @@
+Checks: '-*,
+bugprone-*,
+modernize-*,
+performance-*,
+readability-*,
+-readability-implicit-bool-conversion,
+-readability-identifier-length,
+-readability-magic-numbers,
+-bugprone-easily-swappable-parameters'
+
+CheckOptions:
+  - key: readability-function-cognitive-complexity.IgnoreMacros
+    value: true
+  - key: readability-function-cognitive-complexity.Threshold
+    value: 40
