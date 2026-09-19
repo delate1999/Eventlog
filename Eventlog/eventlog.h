@@ -1,14 +1,3 @@
-/**
- * @file eventlog.h
- * @author Mateusz
- * @date 19.03.2025
- * @copyright 2025 Pysense. All rights reserved.
- *
- * @brief
- *
- */
-
-
 #ifndef EVENTLOG_H
 #define EVENTLOG_H
 

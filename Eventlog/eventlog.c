@@ -1,12 +1,3 @@
-/**
- * @file eventlog.c
- * @author MK
- * @date 24.07.2026
- *
- */
-
-/*---------------------------------------------------*/
-
 #include "eventlog.h"
 #include "endianness.h"
 #include "string.h"
