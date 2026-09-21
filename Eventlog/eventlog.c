@@ -410,9 +410,9 @@ eventlog_status_t eventlog_read(eventlog_t* const I, void* const buffer, size_t*
 
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-		counter_le = end_be32toh(read_hdr.counter);
-		type_le = end_be16toh(read_hdr.type);
-		time_le = end_be64toh(read_hdr.timestamp);
+		counter_le = end_le32toh(read_hdr.counter);
+		type_le = end_le16toh(read_hdr.type);
+		time_le = end_le64toh(read_hdr.timestamp);
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	#error Check behaviour of reading on big endian system, this was not verified.
 #endif
