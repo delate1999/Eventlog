@@ -5,6 +5,7 @@ add_executable(Eventlog_example main.c)
 
 add_subdirectory(Eventlog)
 add_subdirectory(FlashIncrement)
+add_subdirectory(External)
 
 target_link_libraries(Eventlog_example PRIVATE 
     UtilsEventlog
