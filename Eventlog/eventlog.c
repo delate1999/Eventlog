@@ -55,18 +55,18 @@ typedef struct
 
 /*---------------------------------------------------*/
 
-static uint16_t eventlog_crc_calc(const void* const buffer, const size_t size)
+static uint16_t eventlog_checksum_calc(const void* const buffer, const size_t size)
 {
 	const char* const buffer_data = buffer;
 
-	uint16_t crc = 0;
+	uint16_t checksum = 0;
 
 	for(size_t x = 0; x < size; ++x)
 	{
-		crc += buffer_data[x];
+		checksum += buffer_data[x];
 	}
-
-	return crc;
+	
+	return checksum;
 }
 
 static bool eventlog_is_event_extended(const type_t type)
@@ -268,7 +268,7 @@ eventlog_status_t eventlog_write(eventlog_t* const I, const type_t type, time_t 
 	memcpy(&eventlog_buffer[index], &element_header, sizeof(eventlog_element_hdr_t));
 	index += sizeof(eventlog_element_hdr_t);
 
-	calculated_crc = eventlog_crc_calc(&eventlog_buffer[sizeof(crc_t)], index - sizeof(crc_t));
+	calculated_crc = eventlog_checksum_calc(&eventlog_buffer[sizeof(crc_t)], index - sizeof(crc_t));
 	memcpy(&eventlog_buffer[0], &calculated_crc, sizeof(crc_t));
 
 	ASSERT_FLASH_INCREMENT_NOT_OK(
@@ -387,7 +387,7 @@ eventlog_status_t eventlog_read(eventlog_t* const I, void* const buffer, size_t*
 			memcpy(extended_element_buf + curr_payload_size + sizeof(uint8_t), &read_hdr,
 				   sizeof(eventlog_element_hdr_t));
 
-			calculated_crc = eventlog_crc_calc(extended_element_buf, curr_payload_size + sizeof(uint8_t) +
+			calculated_crc = eventlog_checksum_calc(extended_element_buf, curr_payload_size + sizeof(uint8_t) +
 																		 sizeof(eventlog_element_hdr_t));
 
 			reported_element_size = sizeof(eventlog_element_hdr_t) + sizeof(uint8_t) + curr_payload_size;
@@ -397,7 +397,7 @@ eventlog_status_t eventlog_read(eventlog_t* const I, void* const buffer, size_t*
 			ASSERT_EVENTLOG_STATUS_NOT_OK(
 				eventlog_read_back_and_move_left(&I->flash_increment_events, &curr_crc, sizeof(crc_t)));
 
-			calculated_crc = eventlog_crc_calc(&read_hdr, sizeof(eventlog_element_hdr_t));
+			calculated_crc = eventlog_checksum_calc(&read_hdr, sizeof(eventlog_element_hdr_t));
 
 			reported_element_size = sizeof(eventlog_element_t) - sizeof(crc_t);
 			curr_payload_size = 0;
